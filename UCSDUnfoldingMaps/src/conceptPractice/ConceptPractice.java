@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;    
 
-
 public class ConceptPractice extends PApplet {
 	private String url = "https://static.tripzilla.com/thumb/9/a/18074_620x.jpg";
 	private PImage backgroundImg;
