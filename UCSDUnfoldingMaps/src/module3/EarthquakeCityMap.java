@@ -52,7 +52,11 @@ public class EarthquakeCityMap extends PApplet {
 	
 	//feed with magnitude 2.5+ Earthquakes
 	private String earthquakesURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
-
+	
+	//set colors
+	int ki = color(255, 255, 0);
+	int aka = color(255, 0, 0);
+	int aoi = color(0, 0, 255);
 	
 	public void setup() {
 		size(950, 600, OPENGL);
@@ -116,14 +120,24 @@ public class EarthquakeCityMap extends PApplet {
 		// Create a new SimplePointMarker at the location given by the PointFeature
 		SimplePointMarker marker = new SimplePointMarker(feature.getLocation());
 		
+		marker = setMarkerAndColor(feature, marker);
+		
+		// TODO (Step 4): Add code below to style the marker's size and color 
+	    // according to the magnitude of the earthquake.  
+	    // Don't forget about the constants THRESHOLD_MODERATE and 
+	    // THRESHOLD_LIGHT, which are declared above.
+	    // Rather than comparing the magnitude to a number directly, compare 
+	    // the magnitude to these variables (and change their value in the code 
+	    // above if you want to change what you mean by "moderate" and "light")
+	    
+	    
+	    // Finally return the marker
+	    return marker;
+	}
+
+	public SimplePointMarker setMarkerAndColor(PointFeature feature, SimplePointMarker marker) {
 		Object magObj = feature.getProperty("magnitude");
 		float mag = Float.parseFloat(magObj.toString());
-		
-		// Here is an example of how to use Processing's color method to generate 
-	    // an int that represents the color yellow.  
-	    int ki = color(255, 255, 0);
-		int aka = color(255, 0, 0);
-		int aoi = color(0, 0, 255);
 		
 		//marker no iro ga nandesu ka? 
 		if(mag > 0 && mag < THRESHOLD_LIGHT) {
@@ -137,17 +151,7 @@ public class EarthquakeCityMap extends PApplet {
 			marker.setRadius((float) 11.0);
 		}
 		
-		// TODO (Step 4): Add code below to style the marker's size and color 
-	    // according to the magnitude of the earthquake.  
-	    // Don't forget about the constants THRESHOLD_MODERATE and 
-	    // THRESHOLD_LIGHT, which are declared above.
-	    // Rather than comparing the magnitude to a number directly, compare 
-	    // the magnitude to these variables (and change their value in the code 
-	    // above if you want to change what you mean by "moderate" and "light")
-	    
-	    
-	    // Finally return the marker
-	    return marker;
+		return marker;
 	}
 	
 	public void draw() {
@@ -162,6 +166,36 @@ public class EarthquakeCityMap extends PApplet {
 	private void addKey() 
 	{	
 		// Remember you can use Processing's graphics methods here
+		fill(255, 255, 255);
+		/*
+		 * public void rect(float a, float b, float c, float d, float r)
+		 */
+		rect(20, 55, 175, 200, 7);
+		
+		
+		//EarthQuake key 
+		fill(0, 0, 0);
+		textSize(15);
+		text("EarthQuake key", 40, 70);
+		
+		//5.0+ mag
+		fill(aka);
+		ellipse(45, 119, 11, 11);
+		fill(0, 102, 153);
+		textSize(15);
+		text("5.0+ Magnitude", 70, 125);
+		//4.0+ mag
+		fill(ki);
+		ellipse(45, 159, 9, 9);
+		fill(0, 102, 153);
+		textSize(15);
+		text("4.0+ Magnitude", 70, 165);
+		//below 4.0
+		fill(aoi);
+		ellipse(45, 199, 7, 7);
+		fill(0, 102, 153);
+		textSize(15);
+		text("Below 4.0", 70, 205);
 	
 	}
 }
