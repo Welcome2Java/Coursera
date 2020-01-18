@@ -15,7 +15,7 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	
 	// Did the earthquake occur on land?  This will be set by the subclasses.
 	protected boolean isOnLand;
-
+	protected float radius;
 	// SimplePointMarker has a field "radius" which is inherited
 	// by Earthquake marker:
 	// protected float radius;
@@ -80,7 +80,21 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	// But this is up to you, of course.
 	// You might find the getters below helpful.
 	private void colorDetermine(PGraphics pg) {
-		//TODO: Implement this method
+		float mag = getMagnitude();
+		float depth = getDepth();
+		
+		 int ki = pg.color(255, 255, 0);
+		 int aka = pg.color(255, 0, 0);
+		 int aoi = pg.color(0, 0, 255);
+		 
+		 if(depth <THRESHOLD_INTERMEDIATE) {
+			 pg.fill(ki);
+		 } else if (depth>= THRESHOLD_INTERMEDIATE && depth <THRESHOLD_DEEP) {
+			 pg.fill(aoi);
+		 } else {
+			 pg.fill(aka);
+		 }
+		
 	}
 	
 	

@@ -84,7 +84,6 @@ public class EarthquakeCityMap extends PApplet {
 	    
 	    if(earthquakes.size()>0) {
 	    	PointFeature f = earthquakes.get(0);
-	    	System.out.println(f.getProperties());
 	    	Object magObj = f.getProperty("magnitude");
 	    	float mag = Float.parseFloat(magObj.toString());
 	    }
@@ -94,6 +93,7 @@ public class EarthquakeCityMap extends PApplet {
 	    // Then add each new SimplePointMarker to the List markers (so that it will be added to the map in the line below).
 	    for(int i=0; i<earthquakes.size(); i++) {
 	    	PointFeature feature = earthquakes.get(i);
+	    	System.out.println(feature.getProperties());
 	    	markers.add(createMarker(feature));
 	    }
 	    
