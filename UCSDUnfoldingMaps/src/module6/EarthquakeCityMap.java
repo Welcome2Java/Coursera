@@ -1,7 +1,8 @@
 package module6;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -12,8 +13,8 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
-import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
+import de.fhpotsdam.unfolding.providers.Microsoft;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
@@ -65,17 +66,20 @@ public class EarthquakeCityMap extends PApplet {
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
 	
+	//NEW IN MODULE 6 PEER
+	private List<Marker> airportList;
+	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
-		size(900, 700, OPENGL);
+		size(1500, 1500, OPENGL);
 		if (offline) {
 		    map = new UnfoldingMap(this, 200, 50, 650, 600, new MBTilesMapProvider(mbTilesString));
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 1050, 1000, new Microsoft.AerialProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
-		    //earthquakesURL = "2.5_week.atom";
+		    earthquakesURL = "2.5_week.atom";
 		}
 		MapUtils.createDefaultEventDispatcher(this, map);
 		
@@ -104,6 +108,21 @@ public class EarthquakeCityMap extends PApplet {
 	    List<PointFeature> earthquakes = ParseFeed.parseEarthquake(this, earthquakesURL);
 	    quakeMarkers = new ArrayList<Marker>();
 	    
+	    //   STEP 4: read in airport data
+	    airportList = new ArrayList<Marker>();
+		HashMap<Integer, Location> airports = new HashMap<Integer, Location>();
+		List<PointFeature> features = ParseFeed.parseAirports(this, "airports.dat");
+		
+		for(PointFeature feature : features) {
+			AirportMarker m = new AirportMarker(feature);
+	
+			m.setRadius(5);
+			airportList.add(m);
+			
+			// put airport in hashmap with OpenFlights unique id for key
+			airports.put(Integer.parseInt(feature.getId()), feature.getLocation());
+		}
+		
 	    for(PointFeature feature : earthquakes) {
 		  //check if LandQuake
 		  if(isLand(feature)) {
@@ -114,16 +133,17 @@ public class EarthquakeCityMap extends PApplet {
 		    quakeMarkers.add(new OceanQuakeMarker(feature));
 		  }
 	    }
-
+	    //sortAndPrint(6);
 	    // could be used for debugging
-	    printQuakes();
+	   // printQuakes();
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
 	    //           for their geometric properties
+	    map.addMarkers(airportList);
 	    map.addMarkers(quakeMarkers);
 	    map.addMarkers(cityMarkers);
-	    
+	   
 	    
 	}  // End setup
 	
@@ -137,7 +157,18 @@ public class EarthquakeCityMap extends PApplet {
 	
 	
 	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
+	private void sortAndPrint(int numToPrint) {
+		List<EarthquakeMarker> list = new ArrayList<>();
+		
+		for(Marker mark : quakeMarkers) {
+			list.add((EarthquakeMarker) mark);
+		}
+		Collections.sort(list);
+		for (int i=0; i<numToPrint; i++) {
+			System.out.println(list.get(i));
+		}
+		
+	}
 	// and then call that method from setUp
 	
 	/** Event handler that gets called automatically when the 
@@ -154,6 +185,7 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
+		selectMarkerIfHover(airportList);
 		//loop();
 	}
 	
@@ -193,10 +225,41 @@ public class EarthquakeCityMap extends PApplet {
 			checkEarthquakesForClick();
 			if (lastClicked == null) {
 				checkCitiesForClick();
+				if(lastClicked ==null) {
+					checkAirportForClick();
+				}
+			}
+		}
+	}
+	private void checkAirportForClick() {
+		if(lastClicked != null) {
+			return;
+		}
+		for(Marker marker : airportList) {
+			if(!marker.isHidden() && marker.isInside(map, mouseX, mouseY)) {
+				lastClicked = (CommonMarker)marker;
+				
+				for (Marker mhide : airportList) {
+					if (mhide != lastClicked) {
+						mhide.setHidden(true);
+					}
+				}
+				//iterating code so see if the airports are going to be effect by quakes
+				for (Marker mhide : quakeMarkers) {
+					EarthquakeMarker quakeMarker = (EarthquakeMarker)mhide;
+					if (quakeMarker.getDistanceTo(marker.getLocation()) 
+							> quakeMarker.threatCircle()) {
+						quakeMarker.setHidden(true);
+					}
+				}
+				return;
 			}
 		}
 	}
 	
+	
+	
+
 	// Helper method that will check if a city marker was clicked on
 	// and respond appropriately
 	private void checkCitiesForClick()
@@ -246,6 +309,13 @@ public class EarthquakeCityMap extends PApplet {
 						mhide.setHidden(true);
 					}
 				}
+				
+				for (Marker mhide : airportList) {
+					if (mhide.getDistanceTo(marker.getLocation()) 
+							> marker.threatCircle()) {
+						mhide.setHidden(true);
+					}
+				}
 				return;
 			}
 		}
@@ -258,6 +328,10 @@ public class EarthquakeCityMap extends PApplet {
 		}
 			
 		for(Marker marker : cityMarkers) {
+			marker.setHidden(false);
+		}
+		//unhide markers for airports
+		for(Marker marker : airportList) {
 			marker.setHidden(false);
 		}
 	}
