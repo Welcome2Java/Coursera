@@ -77,7 +77,7 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 1050, 1000, new Microsoft.AerialProvider());
+			map = new UnfoldingMap(this, 200, 50, 1250, 1200, new Microsoft.AerialProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    earthquakesURL = "2.5_week.atom";
 		}
@@ -238,7 +238,6 @@ public class EarthquakeCityMap extends PApplet {
 		for(Marker marker : airportList) {
 			if(!marker.isHidden() && marker.isInside(map, mouseX, mouseY)) {
 				lastClicked = (CommonMarker)marker;
-				
 				for (Marker mhide : airportList) {
 					if (mhide != lastClicked) {
 						mhide.setHidden(true);
@@ -252,6 +251,14 @@ public class EarthquakeCityMap extends PApplet {
 						quakeMarker.setHidden(true);
 					}
 				}
+				//when click airport. hide cities
+				for (Marker mhide : cityMarkers) {
+					if (mhide != lastClicked) {
+						mhide.setHidden(true);
+					}
+				}
+
+			
 				return;
 			}
 		}
@@ -282,6 +289,15 @@ public class EarthquakeCityMap extends PApplet {
 						quakeMarker.setHidden(true);
 					}
 				}
+			
+				for (Marker mhide : airportList) {
+					if (mhide != lastClicked) {
+						mhide.setHidden(true);
+					}
+				}
+				
+				
+				
 				return;
 			}
 		}		
@@ -309,13 +325,15 @@ public class EarthquakeCityMap extends PApplet {
 						mhide.setHidden(true);
 					}
 				}
-				
+				//show the airports affected by the quake. 
 				for (Marker mhide : airportList) {
 					if (mhide.getDistanceTo(marker.getLocation()) 
 							> marker.threatCircle()) {
 						mhide.setHidden(true);
 					}
 				}
+				
+				
 				return;
 			}
 		}
@@ -397,7 +415,9 @@ public class EarthquakeCityMap extends PApplet {
 		line(centerx-8, centery-8, centerx+8, centery+8);
 		line(centerx-8, centery+8, centerx+8, centery-8);
 		
-		
+		fill(0, 0, 0);
+		text("Airport", xbase+50, ybase+230);
+		ellipse(xbase+35, ybase+230, 12, 12);
 	}
 
 	
