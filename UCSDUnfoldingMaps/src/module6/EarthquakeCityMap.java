@@ -410,14 +410,16 @@ public class EarthquakeCityMap extends PApplet {
 		int centerx = xbase+35;
 		int centery = ybase+200;
 		ellipse(centerx, centery, 12, 12);
+		
+		fill(0, 0, 0);
+		text("Airport", xbase+50, ybase+230);
+		ellipse(xbase+35, ybase+230, 12, 12);
 
 		strokeWeight(2);
 		line(centerx-8, centery-8, centerx+8, centery+8);
 		line(centerx-8, centery+8, centerx+8, centery-8);
 		
-		fill(0, 0, 0);
-		text("Airport", xbase+50, ybase+230);
-		ellipse(xbase+35, ybase+230, 12, 12);
+		
 	}
 
 	
