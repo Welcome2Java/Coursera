@@ -81,6 +81,17 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
+		
+		/*
+		 * in order to write this method the following is needed to be understood. 
+		 * The "Written method" rule for how to count syllables in a word. 
+		 * 
+		 * however if we have a file in which contains the number of syllables of a word
+		 * I can create an object for that, have it loop through the dictionary. 
+		 * hopefully in a binary search to save some performance. Linear search could work but the runtime could take
+		 * longer then expected. Once the word is found, a get method for the number of syllables 
+		 * could to the trick. 
+		 */
         return 0;
 	}
 	

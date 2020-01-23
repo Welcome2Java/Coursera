@@ -129,10 +129,28 @@ public abstract class Document {
 	
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
-	{
+	{	
 	    // TODO: You will play with this method in week 1, and 
+		
+		/*
+		 * how to count the number of words in a string. 
+		 * parse through the string and count how many spaces are present in the string 
+		 * and add 1 to account for the first
+		 * word in the string 
+		 * 
+		 * how to count the number of sentences
+		 * parse through the string and count how many "." are found
+		 * 	but what about abbreviated words? how to account for those? 
+		 * 	example. "inc." how to count for this without counting it as a sentence? 
+		 */
 		// then implement it in week 2
-	    return 0.0;
+//		String input = getText();
+//		int lengthOfInput = input.length();
+//	    return (double)lengthOfInput;
+		
+		//we can refractor this piece of code and make it high level. 
+		String input = getText();
+		return (double) input.length();
 	}
 	
 	
