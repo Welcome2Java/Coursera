@@ -8,6 +8,10 @@ import java.util.List;
  */
 public class BasicDocument extends Document 
 {
+	private char space = ' ';
+	private char questionMark = '?';
+	private char period = '.';
+	private char exclamationMark = '!';
 	/** Create a new BasicDocument object
 	 * 
 	 * @param text The full text of the Document.
@@ -36,7 +40,28 @@ public class BasicDocument extends Document
 	{
 		//TODO: Implement this method in week 2 according to the comments above.  
 		// See the Module 2 support videos if you need help.
-	    return 0;
+		int numberOfSpace =0;
+		String str = new String(getText());
+		str.trim();
+		String [] words = str.split(" ");
+		for(int i = 0; i<words.length; i++) {
+			//need to add in a regex check in order to account for any numbers only in an element. 
+			/*
+			 * if words[i] is equals a number only with no characters. Do not increment. 
+			 */
+			if(!words[i].equals("")) {
+				numberOfSpace++;
+			}
+		}
+		//need to replace double space with single space but string is immutable....
+//		
+//		for(int i=0; i<str.length(); i++) {
+//			if(space == str.charAt(i)) {
+//				numberOfSpace++;
+//			}
+//		}
+		
+	    return numberOfSpace;
 	}
 	
 	/**
@@ -56,7 +81,24 @@ public class BasicDocument extends Document
 	{
 	    //TODO: Implement this method.  See the Module 2 support videos 
         // if you need help.
-        return 0;
+		String str = new String(getText());
+		int numberOfSentence =0;
+		str.trim();
+		String [] words = str.split(" ");
+		
+		//use a regex check for each element. If the element contains (. ! ?) increment
+		
+		
+		
+		//need to account for repeats.... example ??? should not count as 3 sentences but as 1
+		
+//		for (int i = 0; i < str.length(); i++) {
+//			if ((str.charAt(i) == period) || (str.charAt(i) == questionMark) || (str.charAt(i) == exclamationMark)) {
+//				numberOfSentence++;
+//			}
+//		}
+		
+        return numberOfSentence;
 	}
 	
 	/**
@@ -76,6 +118,7 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSyllables()
 	{
+		
 	    //TODO: Implement this method in week 2.  See the Module 2 support videos 
         // if you need help.  And note that there is no need to use a regular
 		// expression for the syllable counting.  We recommend you implement 
@@ -92,6 +135,9 @@ public class BasicDocument extends Document
 		 * longer then expected. Once the word is found, a get method for the number of syllables 
 		 * could to the trick. 
 		 */
+		String str = new String(getText());
+		str.trim();
+		String [] words = str.split(" ");
         return 0;
 	}
 	
