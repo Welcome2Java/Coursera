@@ -187,7 +187,7 @@ public class BasicDocument extends Document
 			number = countSyllables(word);
 			totalNumber = totalNumber + number;
 		}
-
+		
         return totalNumber;
 	}
 
@@ -202,7 +202,7 @@ public class BasicDocument extends Document
 		 * in the string, respectively.  You can use these examples to help clarify 
 		 * your understanding of how to count syllables, words, and sentences.
 		 */
-		
+		//testCase(new BasicDocument("These are some sentences. These are some sentences. These are some sentences."), 18, 12, 3);
 		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
 		         32, 15, 1);
 		testCase(new BasicDocument("This is a test.  How many???  "
@@ -219,6 +219,7 @@ public class BasicDocument extends Document
 		testCase(new BasicDocument("Segue"), 2, 1, 1);
 		testCase(new BasicDocument("Sentence"), 2, 1, 1);
 		testCase(new BasicDocument("Sentences?!"), 3, 1, 1);
+		
 		
 	}
 	

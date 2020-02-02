@@ -73,53 +73,25 @@ public abstract class Document {
 		// getNumSyllables method in BasicDocument (module 2) and
 		// EfficientDocument (module 3).
 		
-		//Method was obtained from google, but the code needs refractored
-		//to fit Coursera's rules on how their logic works. 
-
-		int numSyllables = 0;
-
-		String upperCaseWord = word.toUpperCase();
-		// The loop will run from 1 to the character before the last
-		for (int i = 1; i < upperCaseWord.length() - 1; i++) {
-			char ch = upperCaseWord.charAt(i);
-			char c = (upperCaseWord.charAt(i - 1));
-			// Only adds if the char is in the index AND if there is no
-			// other letter in the index fore i
-			if ("AEIOUY".indexOf(ch) >= 0 && "AEIOUY".indexOf(c) == -1) {
-				numSyllables++;
+			int numSyllables = 0;
+			boolean newSyllable = true;
+			String vowels = "aeiouy";
+			char[] cArray = word.toCharArray();
+			for (int i = 0; i < cArray.length; i++)
+			{
+			    if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' 
+			    		&& newSyllable && numSyllables > 0) {
+	                numSyllables--;
+	            }
+			    if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >= 0) {
+					newSyllable = false;
+					numSyllables++;
+				}
+				else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
+					newSyllable = true;
+				}
 			}
-
-		}
-		// Check the first character
-		char a = upperCaseWord.charAt(0);
-		// Check the last character
-		char b = upperCaseWord.charAt(upperCaseWord.length() - 1);
-
-		if(word.length()==1) {
-			if(a=='A' || a == 'I') {
-				return 1;
-			}
-		}
-		// Not count if 'E' is the last char
-		if (b == 'E') {
-			numSyllables = numSyllables;
-		} else if ("AIOUY".indexOf(b) >= 0) { // Add if the last char is not 'E'
-			numSyllables++;
-		}
-		if(b =='I') {
-			if(numSyllables>2) {
-				numSyllables--;
-			}
-		}
-		// Add if the first character is in the index
-		if ("AEIOUY".indexOf(a) >= 0) {
-			numSyllables++;
-		}
-		// There must be at least one syllable
-		if (numSyllables <= 0) {
-			numSyllables = 1;
-		}
-		return numSyllables;
+			return numSyllables;
 	}
 
 	/**
@@ -189,14 +161,18 @@ public abstract class Document {
 		// TODO: You will play with this method in week 1, and
 		// then implement it in week 2
 		
-		String input = getText();
-		words = getNumWords();
-		sentences = getNumSentences();
-		syllables = getNumSyllables();
-		fleschScore =0.0;
+//		String input = getText();
+//		words = getNumWords();
+//		sentences = getNumSentences();
+//		syllables = getNumSyllables();
+//		fleschScore =0.0;
+//		
+//		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+//		return fleschScore;
 		
-		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
-		return fleschScore;
+		double wordCount = (double)getNumWords();
+		return 206.835 - (1.015 * ((wordCount)/getNumSentences())) 
+				- (84.6 * (((double)getNumSyllables())/wordCount));
 		
 		//assignment for week1
 //		int lengthOfInput = input.length();
