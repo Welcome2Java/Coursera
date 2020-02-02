@@ -1,6 +1,8 @@
 package document;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** 
  * A class that represents a text document
@@ -14,7 +16,24 @@ public class EfficientDocument extends Document {
 	private int numWords;  // The number of words in the document
 	private int numSentences;  // The number of sentences in the document
 	private int numSyllables;  // The number of syllables in the document
+	private int number =0;		// The number of syllables returned by the count method.
 	
+	private final String specialCharacters = "([.?!]+)";
+	Pattern sentencePattern = Pattern.compile(specialCharacters);
+	
+	private final String wordCharacters = "[a-zA-Z]*";
+	Pattern wordPattern = Pattern.compile(wordCharacters);
+	
+	private final String numberOnly = "[0-9]";
+	Pattern numberPattern = Pattern.compile(numberOnly);
+	
+	private final String deciamlPattern = "^[1-9][.][1-9][.]";
+	Pattern decimal = Pattern.compile(deciamlPattern);
+	
+    String syllabe = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
+    Pattern syllablePattern = Pattern.compile(syllabe);
+
+
 	public EfficientDocument(String text)
 	{
 		super(text);
@@ -72,8 +91,34 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumSentences() {
-		//TODO: write this method.  Hint: It's simple
-		return 0;
+		// TODO: write this method. Hint: It's simple
+		String str = new String(getText()).trim();
+
+		if (str.equals("")) {
+			return 0;
+		}
+
+		String[] words = str.split(" ");
+
+		for (int i = 0; i < words.length; i++) {
+			String currentWord = words[i];
+			Matcher matcher = sentencePattern.matcher(currentWord);
+			Matcher decimalMatcher = decimal.matcher(currentWord);
+			
+			if (matcher.find()) {
+				numSentences++;
+			}
+
+			if (decimalMatcher.find()) {
+				numSentences++;
+			}
+		}
+
+		Matcher matcher = sentencePattern.matcher(words[words.length - 1]);
+		if (!matcher.find()) {
+			numSentences++;
+		}
+		return numSentences;
 	}
 
 	
@@ -94,7 +139,26 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumWords() {
 		//TODO: write this method.  Hint: It's simple
-	    return 0;
+		String str = new String(getText()).trim();
+		
+		if(str.equals("")) {
+			return 0;
+		}
+		String [] words = str.split(" +");
+		for(int i = 0; i<words.length; i++) {
+			String currentWord = words[i];
+			Matcher matcher = wordPattern.matcher(currentWord);
+			if(matcher.find()) {
+				numWords++;
+			}
+			Matcher matcherNumber = numberPattern.matcher(currentWord);
+			if(matcherNumber.find()) {
+				numWords--;
+			}
+		}
+		
+		
+		return numWords;
 	}
 
 
@@ -115,8 +179,15 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumSyllables() {
-        //TODO: write this method.  Hint: It's simple
-        return 0;
+		List<String> tokens = getTokens("[a-zA-Z]+");
+		
+		for(int i=0; i<tokens.size(); i++) {
+			String word = tokens.get(i);
+			number = countSyllables(word);
+			numSyllables = numSyllables + number;
+		}
+
+        return numSyllables;
 	}
 	
 	// Can be used for testing

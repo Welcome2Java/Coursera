@@ -57,9 +57,13 @@ public class BasicDocument extends Document
 	public int getNumWords()
 	{
 		//TODO: Implement this method in week 2 according to the comments above.  
-		// See the Module 2 support videos if you need help.
+		// See the Module 2 support videos
 		String str = new String(getText()).trim();
-
+		
+		if(str.equals("")) {
+			return 0;
+		}
+		
 		//accounts for any double spaces. 
 		String [] words = str.split(" +");
 		for(int i = 0; i<words.length; i++) {
@@ -104,13 +108,16 @@ public class BasicDocument extends Document
 	public int getNumSentences()
 	{
 	    //TODO: Implement this method.  See the Module 2 support videos 
-        // if you need help.
 		
-		//use a regex check for each element. If the element contains (. ! ?) increment
 		String str = new String(getText()).trim();
+		
+		if(str.equals("")) {
+			return 0;
+		}
 		
 		String [] words = str.split(" ");
 
+		//use a regex check for each element. If the element contains (. ! ?) increment
 		for (int i = 0; i < words.length; i++) {
 			String currentWord = words[i];
 			Matcher matcher = sentencePattern.matcher(currentWord);
@@ -196,15 +203,12 @@ public class BasicDocument extends Document
 		 * your understanding of how to count syllables, words, and sentences.
 		 */
 		
-		String s = "Hello";
-		s.concat(" World!");
-		System.out.println(s);
 		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
 		         32, 15, 1);
 		testCase(new BasicDocument("This is a test.  How many???  "
 		        + "Senteeeeeeeeeences are here... there should be 5!  Right?"),
 				16, 13, 5);
-		//testCase(new BasicDocument(""), 0, 0, 0);
+		testCase(new BasicDocument(""), 0, 0, 0);
 		testCase(new BasicDocument("sentence, with, lots, of, commas.!  "
 		        + "(And some poaren)).  The output is: 7.5."), 15, 11, 4);
 		testCase(new BasicDocument("many???  Senteeeeeeeeeences are"), 6, 3, 2);

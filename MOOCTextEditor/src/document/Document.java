@@ -1,5 +1,6 @@
 package document;
 
+import java.io.ObjectInputStream.GetField;
 /** 
  * A class that represents a text document
  * @author UC San Diego Intermediate Programming MOOC team
@@ -12,6 +13,11 @@ import java.util.regex.Pattern;
 public abstract class Document {
 
 	private String text;
+	public int sentences = 0;
+	public int syllables = 0;
+	public int words=0;
+	public double fleschScore = 0.0;
+	
 
 	/**
 	 * Create a new document from the given text. Because this class is abstract,
@@ -100,6 +106,11 @@ public abstract class Document {
 		} else if ("AIOUY".indexOf(b) >= 0) { // Add if the last char is not 'E'
 			numSyllables++;
 		}
+		if(b =='I') {
+			if(numSyllables>2) {
+				numSyllables--;
+			}
+		}
 		// Add if the first character is in the index
 		if ("AEIOUY".indexOf(a) >= 0) {
 			numSyllables++;
@@ -121,8 +132,8 @@ public abstract class Document {
 	 * @return true if the test case passed. False otherwise.
 	 */
 	public static boolean testCase(Document doc, int syllables, int words, int sentences) {
-		System.out.println("Testing text: ");
-		System.out.print(doc.getText() + "\n....");
+		System.out.println("Testing text: " + doc.getText());
+		System.out.print("....");
 		boolean passed = true;
 		int syllFound = doc.getNumSyllables();
 		int wordsFound = doc.getNumWords();
@@ -145,6 +156,7 @@ public abstract class Document {
 		} else {
 			System.out.println("FAILED.\n");
 		}
+		
 		return passed;
 	}
 
@@ -163,27 +175,36 @@ public abstract class Document {
 	}
 
 	/** return the Flesch readability score of this document */
+	/**
+	 * how to count the number of words in a string. parse through the string and
+	 * count how many spaces are present in the string and add 1 to account for the
+	 * first word in the string
+	 * 
+	 * how to count the number of sentences parse through the string and count how
+	 * many "." are found but what about abbreviated words? how to account for
+	 * those? example. "inc." how to count for this without counting it as a
+	 * sentence?
+	 */
 	public double getFleschScore() {
 		// TODO: You will play with this method in week 1, and
-
-		/*
-		 * how to count the number of words in a string. parse through the string and
-		 * count how many spaces are present in the string and add 1 to account for the
-		 * first word in the string
-		 * 
-		 * how to count the number of sentences parse through the string and count how
-		 * many "." are found but what about abbreviated words? how to account for
-		 * those? example. "inc." how to count for this without counting it as a
-		 * sentence?
-		 */
 		// then implement it in week 2
-//		String input = getText();
+		
+		String input = getText();
+		words = getNumWords();
+		sentences = getNumSentences();
+		syllables = getNumSyllables();
+		fleschScore =0.0;
+		
+		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+		return fleschScore;
+		
+		//assignment for week1
 //		int lengthOfInput = input.length();
 //	    return (double)lengthOfInput;
 
 		// we can refractor this piece of code and make it high level.
-		String input = getText();
-		return (double) input.length();
+//		String input = getText();
+//		return (double) input.length();
 	}
 
 }
