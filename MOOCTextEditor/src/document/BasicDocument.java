@@ -1,6 +1,5 @@
 package document;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,10 +9,9 @@ import java.util.regex.Pattern;
  */
 public class BasicDocument extends Document 
 {
-	private char space = ' ';
-	private char questionMark = '?';
-	private char period = '.';
-	private char exclamationMark = '!';
+	private int numberOfSentence =0;
+	private int numberOfSpace =0;
+	private int syllableCount = 0;
 	
 	//to account for repeating characters. 
 	private final String specialCharacters = "([.?!]+)";
@@ -27,6 +25,9 @@ public class BasicDocument extends Document
 	
 	private final String deciamlPattern = "^[1-9][.][1-9][.]";
 	Pattern decimal = Pattern.compile(deciamlPattern);
+	
+    String syllabe = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
+    Pattern syllablePattern = Pattern.compile(syllabe);
 	/** Create a new BasicDocument object
 	 * 
 	 * @param text The full text of the Document.
@@ -55,10 +56,8 @@ public class BasicDocument extends Document
 	{
 		//TODO: Implement this method in week 2 according to the comments above.  
 		// See the Module 2 support videos if you need help.
-		int numberOfSpace =0;
-		String str = new String(getText());
-		
-		str.trim();
+		String str = new String(getText()).trim();
+
 		//accounts for any double spaces. 
 		String [] words = str.split(" +");
 		for(int i = 0; i<words.length; i++) {
@@ -106,9 +105,8 @@ public class BasicDocument extends Document
         // if you need help.
 		
 		//use a regex check for each element. If the element contains (. ! ?) increment
-		String str = new String(getText());
-		int numberOfSentence =0;
-		str.trim();
+		String str = new String(getText()).trim();
+		
 		String [] words = str.split(" ");
 
 		for (int i = 0; i < words.length; i++) {
@@ -181,13 +179,23 @@ public class BasicDocument extends Document
 		 * longer then expected. Once the word is found, a get method for the number of syllables 
 		 * could to the trick. 
 		 */
-		String str = new String(getText());
-		str.trim();
+		
+		
+		String str = new String(getText()).trim();
 		String [] words = str.split(" ");
-        return 0;
+		for (int i = 0; i < words.length; i++) {
+		   String word = words[i];
+			
+		   Matcher match = syllablePattern.matcher(word);
+		   while (match.find()) {
+		    	syllableCount++;
+		    }
+
+		}
+        return syllableCount;
 	}
-	
-	
+
+
 	/* The main method for testing this class. 
 	 * You are encouraged to add your own tests.  */
 	public static void main(String[] args)
