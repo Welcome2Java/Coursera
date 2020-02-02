@@ -1,5 +1,6 @@
 package document;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +12,8 @@ public class BasicDocument extends Document
 {
 	private int numberOfSentence =0;
 	private int numberOfSpace =0;
-	private int syllableCount = 0;
+	private int number =0;
+	private int totalNumber = 0;
 	
 	//to account for repeating characters. 
 	private final String specialCharacters = "([.?!]+)";
@@ -165,34 +167,21 @@ public class BasicDocument extends Document
 		
 	    //TODO: Implement this method in week 2.  See the Module 2 support videos 
         // if you need help.  And note that there is no need to use a regular
-		// expression for the syllable counting.  We recommend you implement 
-		// the helper function countSyllables in Document.java using a loop, 
-		// and then call it here on each word.
-		
+		// expression for the syllable counting.  
 		/*
-		 * in order to write this method the following is needed to be understood. 
-		 * The "Written method" rule for how to count syllables in a word. 
-		 * 
-		 * however if we have a file in which contains the number of syllables of a word
-		 * I can create an object for that, have it loop through the dictionary. 
-		 * hopefully in a binary search to save some performance. Linear search could work but the runtime could take
-		 * longer then expected. Once the word is found, a get method for the number of syllables 
-		 * could to the trick. 
+		 * create a regular expression. To omit special characters and numbers and only return the word in an array. 
+		 * Iterate through the array. Call upon the count method. Research in google how the syllabes are counted. 
 		 */
+	
+		List<String> tokens = getTokens("[a-zA-Z]+");
 		
-		
-		String str = new String(getText()).trim();
-		String [] words = str.split(" ");
-		for (int i = 0; i < words.length; i++) {
-		   String word = words[i];
-			
-		   Matcher match = syllablePattern.matcher(word);
-		   while (match.find()) {
-		    	syllableCount++;
-		    }
-
+		for(int i=0; i<tokens.size(); i++) {
+			String word = tokens.get(i);
+			number = countSyllables(word);
+			totalNumber = totalNumber + number;
 		}
-        return syllableCount;
+
+        return totalNumber;
 	}
 
 
@@ -206,6 +195,12 @@ public class BasicDocument extends Document
 		 * in the string, respectively.  You can use these examples to help clarify 
 		 * your understanding of how to count syllables, words, and sentences.
 		 */
+		
+		String s = "Hello";
+		s.concat(" World!");
+		System.out.println(s);
+		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
+		         32, 15, 1);
 		testCase(new BasicDocument("This is a test.  How many???  "
 		        + "Senteeeeeeeeeences are here... there should be 5!  Right?"),
 				16, 13, 5);
@@ -220,8 +215,7 @@ public class BasicDocument extends Document
 		testCase(new BasicDocument("Segue"), 2, 1, 1);
 		testCase(new BasicDocument("Sentence"), 2, 1, 1);
 		testCase(new BasicDocument("Sentences?!"), 3, 1, 1);
-		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
-		         32, 15, 1);
+		
 	}
 	
 }
