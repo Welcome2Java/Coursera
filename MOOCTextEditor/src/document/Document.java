@@ -161,26 +161,19 @@ public abstract class Document {
 		// TODO: You will play with this method in week 1, and
 		// then implement it in week 2
 		
-//		String input = getText();
-//		words = getNumWords();
-//		sentences = getNumSentences();
-//		syllables = getNumSyllables();
-//		fleschScore =0.0;
-//		
-//		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
-//		return fleschScore;
-		
-		double wordCount = (double)getNumWords();
-		return 206.835 - (1.015 * ((wordCount)/getNumSentences())) 
-				- (84.6 * (((double)getNumSyllables())/wordCount));
-		
-		//assignment for week1
-//		int lengthOfInput = input.length();
-//	    return (double)lengthOfInput;
 
-		// we can refractor this piece of code and make it high level.
-//		String input = getText();
-//		return (double) input.length();
+		words = getNumWords();
+		sentences = getNumSentences();
+		syllables = getNumSyllables();
+		fleschScore =0.0;
+		
+		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+		return fleschScore;
+		
+//		double wordCount = (double)getNumWords();
+//		return 206.835 - (1.015 * ((wordCount)/getNumSentences())) 
+//				- (84.6 * (((double)getNumSyllables())/wordCount));
+
 	}
 
 }
