@@ -162,17 +162,17 @@ public abstract class Document {
 		// then implement it in week 2
 		
 
-		words = getNumWords();
-		sentences = getNumSentences();
-		syllables = getNumSyllables();
-		fleschScore =0.0;
+//		words = getNumWords();
+//		sentences = getNumSentences();
+//		syllables = getNumSyllables();
+//		fleschScore =0.0;
+//		
+//		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+//		return fleschScore;
 		
-		fleschScore = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
-		return fleschScore;
-		
-//		double wordCount = (double)getNumWords();
-//		return 206.835 - (1.015 * ((wordCount)/getNumSentences())) 
-//				- (84.6 * (((double)getNumSyllables())/wordCount));
+		double wordCount = (double)getNumWords();
+		return 206.835 - (1.015 * ((wordCount)/getNumSentences())) 
+				- (84.6 * (((double)getNumSyllables())/wordCount));
 
 	}
 

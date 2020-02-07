@@ -91,7 +91,6 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumSentences() {
-		// TODO: write this method. Hint: It's simple
 		String str = new String(getText()).trim();
 
 		if (str.equals("")) {
@@ -138,7 +137,6 @@ public class EfficientDocument extends Document {
 	 */
 	@Override
 	public int getNumWords() {
-		//TODO: write this method.  Hint: It's simple
 		String str = new String(getText()).trim();
 		
 		if(str.equals("")) {
